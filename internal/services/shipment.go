@@ -7,6 +7,8 @@ import (
 	"olist-project/internal/entities"
 	"olist-project/internal/repositories"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type ShipmentService struct {
@@ -43,4 +45,25 @@ func (s *ShipmentService) CreateShipment(ctx context.Context, req dto.CreateShip
 		EstimatedDeliveryAt: shipment.EstimatedDeliveryAt,
 		TrackingCode:        shipment.TrackingCode,
 	}, nil
+}
+
+func (s *ShipmentService) List(filters dto.ShipmentFilter) ([]entities.Shipment, error) {
+	return s.repo.FindAll(filters)
+}
+
+func (s *ShipmentService) GetByID(ctx context.Context, id uuid.UUID) (*entities.Shipment, error) {
+	return s.repo.FindByID(ctx, id)
+}
+
+func (s *ShipmentService) Update(ctx context.Context, id uuid.UUID, req dto.UpdateShipmentRequest) (*entities.Shipment, error) {
+	return s.repo.Update(ctx, id, req)
+}
+
+func (s *ShipmentService) Delete(ctx context.Context, id uuid.UUID) error {
+	_, err := s.repo.FindByID(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	return s.repo.Delete(ctx, id)
 }

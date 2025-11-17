@@ -58,6 +58,10 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 		shipments := v1.Group("/shipments")
 		{
 			shipments.POST("", shipmentHandler.Create)
+			shipments.GET("", shipmentHandler.List)
+			shipments.GET("/:id", shipmentHandler.Get)
+			shipments.PUT("/:id", shipmentHandler.Update)
+			shipments.DELETE("/:id", shipmentHandler.Delete)
 		}
 	}
 

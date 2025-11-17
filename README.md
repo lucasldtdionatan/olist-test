@@ -354,6 +354,61 @@ POST /api/v1/shipments
 }
 ```
 
+#### List Shipments
+```
+GET /api/v1/shipments?package_id=uuid&transport_company_id=uuid
+```
+
+**Query Parameters (optional):**
+- `package_id` - Filter by package ID
+- `transport_company_id` - Filter by transport company ID
+
+**Response:** 200 OK
+```json
+[
+  {
+    "id": "uuid",
+    "package_id": "uuid",
+    "transport_company_id": "uuid",
+    "price": 26.25,
+    "estimated_days": 5,
+    "estimated_delivery_at": "2024-01-06T00:00:00Z",
+    "tracking_code": "ABC123XYZ"
+  }
+]
+```
+
+#### Get Shipment by ID
+```
+GET /api/v1/shipments/:id
+```
+
+**Response:** 200 OK (same format as create)
+
+#### Update Shipment
+```
+PUT /api/v1/shipments/:id
+```
+
+**Body (all fields optional):**
+```json
+{
+  "price": 30.00,
+  "estimated_days": 7
+}
+```
+
+**Response:** 200 OK (same format as create)
+
+**Note:** When `estimated_days` is updated, `estimated_delivery_at` is automatically recalculated based on the shipment creation date.
+
+#### Delete Shipment
+```
+DELETE /api/v1/shipments/:id
+```
+
+**Response:** 204 No Content
+
 ## 🚀 How to Run
 
 ### Prerequisites
@@ -572,6 +627,31 @@ curl -X POST http://localhost:8080/api/v1/shipments \
     "price": 26.25,
     "estimated_days": 5
   }'
+```
+
+### 6. List shipments
+```bash
+curl http://localhost:8080/api/v1/shipments?package_id=uuid
+```
+
+### 7. Get shipment by ID
+```bash
+curl http://localhost:8080/api/v1/shipments/{id}
+```
+
+### 8. Update shipment
+```bash
+curl -X PUT http://localhost:8080/api/v1/shipments/{id} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "price": 30.00,
+    "estimated_days": 7
+  }'
+```
+
+### 9. Delete shipment
+```bash
+curl -X DELETE http://localhost:8080/api/v1/shipments/{id}
 ```
 
 ## 🏗 Architecture

@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"olist-project/internal/entities"
 )
 
 type CreateShipmentRequest struct {
@@ -21,4 +22,34 @@ type ShipmentResponse struct {
 	EstimatedDays       int       `json:"estimated_days"`
 	EstimatedDeliveryAt time.Time `json:"estimated_delivery_at"`
 	TrackingCode        string    `json:"tracking_code"`
+}
+
+type ShipmentFilter struct {
+	PackageID          *string `form:"package_id"`
+	TransportCompanyID *string `form:"transport_company_id"`
+}
+
+type UpdateShipmentRequest struct {
+	Price         *float64 `json:"price"`
+	EstimatedDays *int     `json:"estimated_days"`
+}
+
+func ToShipmentResponse(s entities.Shipment) ShipmentResponse {
+	return ShipmentResponse{
+		ID:                  s.ID,
+		PackageID:           s.PackageID,
+		TransportCompanyID:  s.TransportCompanyID,
+		Price:               s.Price,
+		EstimatedDays:      s.EstimatedDays,
+		EstimatedDeliveryAt: s.EstimatedDeliveryAt,
+		TrackingCode:        s.TrackingCode,
+	}
+}
+
+func ToShipmentResponseList(list []entities.Shipment) []ShipmentResponse {
+	result := make([]ShipmentResponse, len(list))
+	for i, item := range list {
+		result[i] = ToShipmentResponse(item)
+	}
+	return result
 }
